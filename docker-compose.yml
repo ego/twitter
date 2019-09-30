@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+
+  pg:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 5482:5482
+    env_file:
+      - ./postgres.env
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: .
+      args:
+          develop: 1
+    restart: always
+    command: "adev runserver"
+    ports:
+      - 8888:8888
+    env_file:
+      - ./app.env
+      - ./postgres.env
+    volumes:
+      - .:/service
+    depends_on:
+      - pg
+    networks:
+      - app-network
+
+    working_dir: /service
+    stdin_open: true
+    tty: true
+
+
+networks:
+  app-network:
+    name: app-network
+    driver: bridge
