@@ -1,6 +1,6 @@
 -r base.txt
 
-ipython==7.8.0
+ipython==7.16.3
 ipdb==0.12.2
 isort==4.3.21
 aiohttp-devtools==0.13.1
